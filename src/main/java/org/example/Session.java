@@ -43,11 +43,12 @@ public class Session {
         return ticket;
     }
 
-    public void refundTicket(Ticket ticket) throws Exception {
-        assert(ticket.getSession() == this);
-        assert(ticket.getSeatId() >= 0 && ticket.getSeatId() < numberOfTickets);
+    public boolean isTicketValid(Ticket ticket) {
+        return ticket.getSession() == this && ticket.getSeatId() < numberOfTickets && !availableSeats.contains(ticket.getSeatId());
+    }
 
-        if (availableSeats.contains(ticket.getSeatId())) {
+    public void refundTicket(Ticket ticket) throws Exception {
+        if (!isTicketValid(ticket)) {
             throw new Exception("Invalid ticket");
         }
 
