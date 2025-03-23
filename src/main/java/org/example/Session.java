@@ -20,6 +20,13 @@ public class Session {
         }
     }
 
+    public Session(String movieName, int durationInMinutes, int numberOfTickets, HashSet<Integer> availableSeats) {
+        this.movieName = movieName;
+        this.durationInMinutes = durationInMinutes;
+        this.numberOfTickets = numberOfTickets;
+        this.availableSeats = availableSeats;
+    }
+
     public HashSet<Integer> getAvailableSeats() {
         return availableSeats;
     }

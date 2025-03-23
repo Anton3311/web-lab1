@@ -10,6 +10,10 @@ public class Cinema {
         this.sessions = new ArrayList<>();
     }
 
+    public Cinema(ArrayList<Session> sessions) {
+        this.sessions = sessions;
+    }
+
     public void addSession(Session session) {
         sessions.add(session);
     }
@@ -20,6 +24,10 @@ public class Cinema {
 
     public boolean removeSession(Session session) {
         return sessions.remove(session);
+    }
+
+    public void setSessions(ArrayList<Session> sessions) {
+        this.sessions = sessions;
     }
 
     @Override

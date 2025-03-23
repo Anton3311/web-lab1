@@ -1,5 +1,7 @@
 package org.example;
 
+import java.util.ArrayList;
+
 public class Main {
     public static void main(String[] args) {
         Cinema cinema = new Cinema();
@@ -13,5 +15,13 @@ public class Main {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+
+        CinemaDataExporter cinemaDataExporter = new CinemaDataExporter();
+        String csv = cinemaDataExporter.exportToCsvString(cinema, SortCriteria.None);
+
+        CinemaDataImporter importer = new CinemaDataImporter();
+        ArrayList<Session> sessions = importer.importSessionsFromCsv(csv, ';');
+
+        cinema.setSessions(sessions);
     }
 }
