@@ -14,6 +14,16 @@ public class Cinema {
         this.sessions = sessions;
     }
 
+    public Session findMovieByName(String name) throws Exception {
+        for (Session session : sessions) {
+            if (session.getMovieName().equals(name)) {
+                return session;
+            }
+        }
+
+        throw new Exception(String.format("Failed to find a movie with the name '%s'", name));
+    }
+
     public void addSession(Session session) {
         sessions.add(session);
     }
