@@ -41,7 +41,9 @@ public class CinemaDataExporter {
         stringBuilder.append(separator);
         stringBuilder.append('\n');
 
-        for (Session session : sessions) {
+        for (int sessionIndex = 0; sessionIndex < sessions.size(); sessionIndex++) {
+            Session session = sessions.get(sessionIndex);
+
             stringBuilder.append(session.getMovieName());
             stringBuilder.append(separator);
             stringBuilder.append(session.getDurationInMinutes());
@@ -50,7 +52,10 @@ public class CinemaDataExporter {
             stringBuilder.append(separator);
             stringBuilder.append(session.getAvailableSeats());
             stringBuilder.append(separator);
-            stringBuilder.append('\n');
+
+            if (sessionIndex < sessions.size() - 1) {
+                stringBuilder.append('\n');
+            }
         }
 
         return stringBuilder.toString();
