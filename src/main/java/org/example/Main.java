@@ -15,6 +15,7 @@ public class Main {
     private static final String exportCommandName = "export";
     private static final String deleteCommandName = "delete";
     private static final String refundCommandName = "refund";
+    private static final String ticketStatsCommandName = "ticket_stats";
 
     public static void main(String[] args) {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
@@ -33,9 +34,10 @@ public class Main {
                 } else if (command.equals(sessionsCommandName)) {
                     for (Session session : cinema.getSessions()) {
                         System.out.printf(
-                                "Name = %s Duration = %d minutes NumberOfTickets = %d AvailableSeats = %s\n",
+                                "Name = %s Duration = %d TicketPrice = %d NumberOfTickets = %d AvailableSeats = %s\n",
                                 session.getMovieName(),
                                 session.getDurationInMinutes(),
+                                session.getTicketPrice(),
                                 session.getNumberOfTickets(),
                                 session.getAvailableSeats().toString());
                     }
@@ -124,6 +126,15 @@ public class Main {
                         session.refundTicket(ticket);
                     } catch (Exception e) {
                         System.out.println(e.getMessage());
+                    }
+                } else if (command.equals(ticketStatsCommandName)) {
+                    for (Session session : cinema.getSessions()) {
+                        int totalSum = session.getTicketsSold() * session.getTicketPrice();
+
+                        System.out.printf("Movie Name = %s Ticket Sold = %d Total Income = %d\n",
+                                session.getMovieName(),
+                                session.getTicketsSold(),
+                                totalSum);
                     }
                 } else {
                     System.out.printf("Unknown command '%s'\n", command);
