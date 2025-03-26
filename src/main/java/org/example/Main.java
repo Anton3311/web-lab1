@@ -5,24 +5,32 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
 
 public class Main {
+    private static final String exitCommandName = "exit";
+    private static final String sessionsCommandName = "movies";
+    private static final String createCommandName = "create";
+    private static final String buyTicketCommandName = "buy_ticket";
+    private static final String importCommandName = "import";
+    private static final String exportCommandName = "export";
+    private static final String deleteCommandName = "delete";
+    private static final String refundCommandName = "refund";
+
     public static void main(String[] args) {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
         Cinema cinema = new Cinema();
 
+        printCommands();
+
         while (true) {
             try {
                 System.out.print("> ");
-                String line = reader.readLine();
+                String command = reader.readLine();
 
-                if (line.equals("exit")) {
+                if (command.equals(exitCommandName)) {
                     break;
-                } else if (line.equals("help")) {
-                    // TODO: print help
-                } else if (line.equals("movies")) {
+                } else if (command.equals(sessionsCommandName)) {
                     for (Session session : cinema.getSessions()) {
                         System.out.printf(
                                 "Name = %s Duration = %d minutes NumberOfTickets = %d AvailableSeats = %s\n",
@@ -31,7 +39,7 @@ public class Main {
                                 session.getNumberOfTickets(),
                                 session.getAvailableSeats().toString());
                     }
-                } else if (line.equals("create")) {
+                } else if (command.equals(createCommandName)) {
                     System.out.print("Name: ");
                     String name = reader.readLine();
                     System.out.print("Duration: ");
@@ -40,7 +48,7 @@ public class Main {
                     int numberOfTickets = Integer.parseInt(reader.readLine());
 
                     cinema.addSession(new Session(name, duration, numberOfTickets));
-                } else if (line.equals("buy_ticket")) {
+                } else if (command.equals(buyTicketCommandName)) {
                     System.out.print("Movie name: ");
                     String name = reader.readLine();
 
@@ -50,23 +58,24 @@ public class Main {
                         System.out.printf("Seat number [0; %d]: ", session.getNumberOfTickets() - 1);
                         int seat = Integer.parseInt(reader.readLine());
 
-                        Ticket ticket = session.buyTicket(seat);
+                        session.buyTicket(seat);
                         System.out.println("A ticket has been bought");
                     } catch (Exception e) {
                         System.out.println(e.getMessage());
                     }
-                } else if (line.equals("import")) {
-                    // TODO: File not found errors
-
+                } else if (command.equals(importCommandName)) {
                     System.out.print(".csv file path: ");
-                    String importPath = reader.readLine();
+                    Path importPath = Path.of(reader.readLine());
 
-                    String csv = Files.readString(Path.of(importPath));
+                    if (!Files.exists(importPath)) {
+                        System.out.printf("File '%s' doesn't exist\n", importPath);
+                        continue;
+                    }
+
+                    String csv = Files.readString(importPath);
                     CinemaDataImporter importer = new CinemaDataImporter();
                     cinema.setSessions(importer.importSessionsFromCsv(csv, ';'));
-                } else if (line.equals("export")) {
-                    // TODO: File not found errors
-
+                } else if (command.equals(exportCommandName)) {
                     System.out.print("Output file path: ");
                     String outputFilePath = reader.readLine();
 
@@ -89,7 +98,7 @@ public class Main {
 
                     CinemaDataExporter exporter = new CinemaDataExporter();
                     Files.writeString(Path.of(outputFilePath), exporter.exportToCsvString(cinema, sortCriteria));
-                } else if (line.equals("delete")) {
+                } else if (command.equals(deleteCommandName)) {
                     System.out.print("Movie name: ");
                     String name = reader.readLine();
 
@@ -99,13 +108,12 @@ public class Main {
                     } catch (Exception e) {
                         System.out.println(e.getMessage());
                     }
-                } else if (line.equals("refund")) {
+                } else if (command.equals(refundCommandName)) {
                     System.out.print("Movie name: ");
                     String name = reader.readLine();
 
                     try {
                         Session session = cinema.findMovieByName(name);
-                        cinema.removeSession(session);
 
                         System.out.print("Seat number: ");
                         int seat = Integer.parseInt(reader.readLine());
@@ -115,10 +123,33 @@ public class Main {
                     } catch (Exception e) {
                         System.out.println(e.getMessage());
                     }
+                } else {
+                    System.out.printf("Unknown command '%s'\n", command);
                 }
             } catch (IOException e) {
                 break;
             }
         }
+    }
+
+    private static void printCommands() {
+        System.out.println("Available commands:");
+
+        System.out.print(exitCommandName);
+        System.out.println(" - to exit the program");
+        System.out.print(sessionsCommandName);
+        System.out.println(" - display the list of sessions");
+        System.out.print(createCommandName);
+        System.out.println(" - create a session");
+        System.out.print(deleteCommandName);
+        System.out.println(" - delete a session");
+        System.out.print(buyTicketCommandName);
+        System.out.println(" - buy a ticket");
+        System.out.print(refundCommandName);
+        System.out.println(" - refund a ticket");
+        System.out.print(importCommandName);
+        System.out.println(" - import sessions from a csv file");
+        System.out.print(exportCommandName);
+        System.out.println(" - export sessions to a csv file");
     }
 }
