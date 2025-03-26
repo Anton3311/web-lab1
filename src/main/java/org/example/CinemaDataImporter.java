@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 public class CinemaDataImporter {
-    public ArrayList<Session> importSessionsFromCsv(String csvString, char separator) {
+    public ArrayList<Session> importSessionsFromCsv(String csvString, char separator) throws Exception {
         String[] lines = csvString.lines().toArray(size -> new String[size]);
 
         String separatorString = String.valueOf(separator);
@@ -33,9 +33,21 @@ public class CinemaDataImporter {
 			}
         }
 
+        if (movieNameColumnIndex == -1
+                || durationColumnIndex == -1
+                || numberOfTicketsColumnIndex == -1
+                || availableSeatsColumnIndex == -1
+                || ticketPriceColumnIndex == -1) {
+            throw new Exception("Not every column is present in the CSV string");
+        }
+
         ArrayList<Session> sessions = new ArrayList<>(lines.length - 1);
         for (int i = 1; i < lines.length; i++) {
             String[] parts = lines[i].split(separatorString);
+
+            if (parts.length != headers.length) {
+                throw new Exception("Number of elements in the rows doesn't match the number of headers");
+            }
 
             String movieName = parts[movieNameColumnIndex];
             int duration = Integer.parseInt(parts[durationColumnIndex]);

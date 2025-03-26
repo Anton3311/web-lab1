@@ -44,7 +44,7 @@ public class DataImportExportTests {
         Movie 3;150;200;3;[0, 1, 2];""";
 
         CinemaDataImporter importer = new CinemaDataImporter();
-        ArrayList<Session> sessions = importer.importSessionsFromCsv(csv, ';');
+        ArrayList<Session> sessions = assertDoesNotThrow(() -> importer.importSessionsFromCsv(csv, ';'));
 
         ArrayList<Session> expectedMovies = new ArrayList<>();
         expectedMovies.add(new Session("Movie 1", 100, 200, 3));
@@ -52,5 +52,27 @@ public class DataImportExportTests {
         expectedMovies.add(new Session("Movie 3", 150, 200, 3));
 
         assertEquals(expectedMovies, sessions);
+    }
+
+    @Test
+    public void importFromInvalidCsv() {
+        String invalidCsv = "MovieName;";
+
+        CinemaDataImporter importer = new CinemaDataImporter();
+        assertThrows(Exception.class, () -> importer.importSessionsFromCsv(invalidCsv, ';'));
+    }
+
+    @Test
+    public void importFromCsvWithMismatchingNumberOfElementsInRows() {
+        String csv = """
+        MovieName;Duration;TicketPrice;NumberOfTickets;AvailableSeats;
+        Movie 1;100;200;3;[0, 1, 2];
+        Movie 2;200;200;
+        Movie 3;150;200;3;[0, 1, 2];""";
+
+        String errorMessage = "Number of elements in the rows doesn't match the number of headers";
+
+        CinemaDataImporter importer = new CinemaDataImporter();
+        assertThrowsExactly(Exception.class, () -> importer.importSessionsFromCsv(csv, ';'), errorMessage);
     }
 }

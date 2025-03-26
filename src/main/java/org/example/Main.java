@@ -78,7 +78,12 @@ public class Main {
 
                     String csv = Files.readString(importPath);
                     CinemaDataImporter importer = new CinemaDataImporter();
-                    cinema.setSessions(importer.importSessionsFromCsv(csv, ';'));
+
+                    try {
+                        cinema.setSessions(importer.importSessionsFromCsv(csv, ';'));
+                    } catch (Exception e) {
+                        System.out.printf("Error: %s\n", e.getMessage());
+                    }
                 } else if (command.equals(exportCommandName)) {
                     System.out.print("Output file path: ");
                     String outputFilePath = reader.readLine();
