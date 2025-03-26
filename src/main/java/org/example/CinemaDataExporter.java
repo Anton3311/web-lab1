@@ -35,6 +35,8 @@ public class CinemaDataExporter {
         stringBuilder.append(separator);
         stringBuilder.append("Duration");
         stringBuilder.append(separator);
+        stringBuilder.append("TicketPrice");
+        stringBuilder.append(separator);
         stringBuilder.append("NumberOfTickets");
         stringBuilder.append(separator);
         stringBuilder.append("AvailableSeats");
@@ -47,6 +49,8 @@ public class CinemaDataExporter {
             stringBuilder.append(session.getMovieName());
             stringBuilder.append(separator);
             stringBuilder.append(session.getDurationInMinutes());
+            stringBuilder.append(separator);
+            stringBuilder.append(session.getTicketPrice());
             stringBuilder.append(separator);
             stringBuilder.append(session.getNumberOfTickets());
             stringBuilder.append(separator);

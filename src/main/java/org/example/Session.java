@@ -7,24 +7,27 @@ public class Session {
     private final String movieName;
     private final int durationInMinutes;
     private final int numberOfTickets;
+	private final int ticketPrice;
     private final HashSet<Integer> availableSeats;
 
-    public Session(String movieName, int durationInMinutes, int numberOfTickets) {
+    public Session(String movieName, int durationInMinutes, int ticketPrice, int numberOfTickets) {
         this.movieName = movieName;
         this.durationInMinutes = durationInMinutes;
         this.numberOfTickets = numberOfTickets;
         this.availableSeats = new HashSet<>();
+		this.ticketPrice = ticketPrice;
 
         for (int i = 0; i < numberOfTickets; i++) {
             availableSeats.add(i);
         }
     }
 
-    public Session(String movieName, int durationInMinutes, int numberOfTickets, HashSet<Integer> availableSeats) {
+    public Session(String movieName, int durationInMinutes, int ticketPrice, int numberOfTickets, HashSet<Integer> availableSeats) {
         this.movieName = movieName;
         this.durationInMinutes = durationInMinutes;
         this.numberOfTickets = numberOfTickets;
         this.availableSeats = availableSeats;
+		this.ticketPrice = ticketPrice;
     }
 
     public HashSet<Integer> getAvailableSeats() {
@@ -34,6 +37,10 @@ public class Session {
     public int getTicketsSold() {
         return numberOfTickets - availableSeats.size();
     }
+
+	public int getTicketPrice() {
+		return ticketPrice;
+	}
 
     public Ticket buyTicket(int seat) throws Exception {
         if (availableSeats.isEmpty()) {

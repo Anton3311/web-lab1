@@ -46,8 +46,10 @@ public class Main {
                     int duration = Integer.parseInt(reader.readLine());
                     System.out.print("Number of tickets: ");
                     int numberOfTickets = Integer.parseInt(reader.readLine());
+                    System.out.print("Ticket price: ");
+					int ticketPrice = Integer.parseInt(reader.readLine());
 
-                    cinema.addSession(new Session(name, duration, numberOfTickets));
+                    cinema.addSession(new Session(name, duration, ticketPrice, numberOfTickets));
                 } else if (command.equals(buyTicketCommandName)) {
                     System.out.print("Movie name: ");
                     String name = reader.readLine();

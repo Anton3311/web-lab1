@@ -16,6 +16,7 @@ public class CinemaDataImporter {
         int durationColumnIndex = -1;
         int numberOfTicketsColumnIndex = -1;
         int availableSeatsColumnIndex = -1;
+		int ticketPriceColumnIndex = -1;
 
         for (int i = 0; i < headers.length; i++) {
             String header = headers[i];
@@ -27,7 +28,9 @@ public class CinemaDataImporter {
                 numberOfTicketsColumnIndex = i;
             } else if (header.equals("AvailableSeats")) {
                 availableSeatsColumnIndex = i;
-            }
+            } else if (header.equals("TicketPrice")) {
+				ticketPriceColumnIndex = i;
+			}
         }
 
         ArrayList<Session> sessions = new ArrayList<>(lines.length - 1);
@@ -37,9 +40,10 @@ public class CinemaDataImporter {
             String movieName = parts[movieNameColumnIndex];
             int duration = Integer.parseInt(parts[durationColumnIndex]);
             int numberOfTickets = Integer.parseInt(parts[numberOfTicketsColumnIndex]);
+			int ticketPrice = Integer.parseInt(parts[ticketPriceColumnIndex]);
             HashSet<Integer> availableSeats = parseAvailableSeats(parts[availableSeatsColumnIndex]);
 
-            sessions.add(new Session(movieName, duration, numberOfTickets, availableSeats));
+            sessions.add(new Session(movieName, duration, ticketPrice, numberOfTickets, availableSeats));
         }
 
         return sessions;
